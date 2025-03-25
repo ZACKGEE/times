@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KCSE Cluster Points Calculator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #74ebd5, #9face6);
+            color: #fff;
+            text-align: center;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+        select, input, button {
+            padding: 15px;
+            margin: 10px auto;
+            width: 85%;
+            border: none;
+            border-radius: 5px;
+            box-shadow: inset 0px 3px 5px rgba(0, 0, 0, 0.2);
+        }
+        select, input {
+            font-size: 1em;
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        button {
+            font-size: 1.2em;
+            background: linear-gradient(135deg, #67b26f, #4ca2cd);
+            color: #fff;
+            cursor: pointer;
+            transition: 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #4ca2cd, #67b26f);
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        #result {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ffc107;
+            margin-top: 20px;
+        }
+        .subject-grade-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        .subject-grade-row label {
+            flex: 1;
+            text-align: left;
+            font-size: 1em;
+        }
+        .subject-grade-row select {
+            flex: 1;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>KCSE Cluster Points Calculator</h1>
+
+        <label for="cluster">Select Desired Cluster:</label>
+        <select id="cluster" onchange="showClusterSubjects()">
+            <option value="">Select Cluster</option>
+            <option value="medicine">Medicine, Dentistry, Pharmacy, Nursing</option>
+            <option value="engineering">Engineering, Architecture, Design, & Technology</option>
+            <option value="biological-sciences">Biological Sciences</option>
+            <option value="physical-sciences">Physical Sciences</option>
+            <option value="agriculture">Agriculture, Environment & Related Courses</option>
+            <option value="veterinary-medicine">Veterinary Medicine</option>
+            <option value="computer-science">Computer Science, IT, & Related Courses</option>
+            <option value="business">Business & Commerce</option>
+            <option value="social-sciences">Social Sciences</option>
+            <option value="education-science">Education Science</option>
+            <option value="education-arts">Education Arts</option>
+            <option value="law">Law</option>
+            <option value="hospitality">Hospitality, Journalism, & Related Courses</option>
+        </select>
+
+        <label for="aggregate">Enter Aggregate Points:</label>
+        <input type="number" id="aggregate" placeholder="e.g., 78" min="0" max="84">
+
+        <div id="subjectInputs" style="display: none;">
+            <p><b>Enter Grades for the Following Subjects:</b></p>
+        </div>
+
+        <button onclick="calculatePoints()">Calculate</button>
+        <button onclick="resetFields()">Reset</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const clusters = {
+            "medicine": ["Mathematics", "English/Kiswahili", "Biology", "Chemistry",],
+            "engineering": ["Mathematics", "Physics", "Chemistry", "Best Science,Humanity or Technical subject"],
+            "biological-sciences": ["Mathematics", "English/Kiswahili", "Biology", "Chemistry"],
+            "physical-sciences": ["Mathematics", "English/Kiswahili", "Physics", "Chemistry"],
+            "agriculture": ["Mathematics", "Biology", "Chemistry", "Best Science,Humanity or Technical subject"],
+            "veterinary-medicine": ["Mathematics", "Biology", "Chemistry", "Best Science,Humanity or Technical subject"],
+            "computer-science": ["Mathematics", "Physics", "Chemistry", "Best Science,Humanity or Technical subject"],
+            "business": ["Mathematics", "English/Kiswahili","Any Humanity" ,"Best Science or Technical subject"],
+            "social-sciences": ["Mathematics", "English/Kiswahili", "Best Humanity","Best Science or Technical subject"],
+            "education-science": ["Mathematics", "best science subject", "English/Kiswahili","Humanity/Technical subject"],
+            "education-arts": ["Mathematics", "English/Kiswahili","Humanity", "Technical or religious subject "],
+            "law": ["Mathematics", "English/Kiswahili", "History/Geography", "Technical/religious subject"],
+            "hospitality": ["English/Kiswahili", "Mathematics", "Best Humanity", "Best Science/Technical subject"]
+        };
+
+        function showClusterSubjects() {
+    const cluster = document.getElementById('cluster').value;
+    const subjectInputs = document.getElementById('subjectInputs');
+    subjectInputs.innerHTML = "<p><b>Enter Grades for the Following Subjects:</b></p>";
+
+    if (cluster && clusters[cluster]) {
+    clusters[cluster].forEach((subject, index) => {
+        if (subject.includes("Any other")) {
+            subjectInputs.innerHTML += `
+                <div class="subject-grade-row">
+                    <label for="subject${index + 1}">${subject}</label>
+                    <select id="subject${index + 1}">
+                        <option value="">Select Grade</option>
+                        <option value="A">A</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B">B</option>
+                        <option value="B-">B-</option>
+                        <option value="C+">C+</option>
+                        <option value="C">C</option>
+                        <option value="C-">C-</option>
+                        <option value="D+">D+</option>
+                        <option value="D">D</option>
+                        <option value="D-">D-</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+            `;
+            subjectInputs.innerHTML += `
+                <div class="subject-grade-row">
+                    <label for="subject${index + 2}">${subject}</label>
+                    <select id="subject${index + 2}">
+                        <option value="">Select Grade</option>
+                        <option value="A">A</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B">B</option>
+                        <option value="B-">B-</option>
+                        <option value="C+">C+</option>
+                        <option value="C">C</option>
+                        <option value="C-">C-</option>
+                        <option value="D+">D+</option>
+                        <option value="D">D</option>
+                        <option value="D-">D-</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+            `;
+        } else {
+            subjectInputs.innerHTML += `
+                <div class="subject-grade-row">
+                    <label for="subject${index + 1}">${subject}</label>
+                    <select id="subject${index + 1}">
+                        <option value="">Select Grade</option>
+                        <option value="A">A</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B">B</option>
+                        <option value="B-">B-</option>
+                        <option value="C+">C+</option>
+                        <option value="C">C</option>
+                        <option value="C-">C-</option>
+                        <option value="D+">D+</option>
+                        <option value="D">D</option>
+                        <option value="D-">D-</option>
+                        <option value="E">E</option>
+                    </select>
+                </div>
+            `;
+        }
+    });
+    subjectInputs.style.display = "block";
+} else {
+    subjectInputs.style.display = "none";
+}
+        }
+
+        function gradeToPoints(grade) {
+            const gradeMap = {
+                'A': 12,
+                'A-': 11,
+                'B+': 10,
+                'B': 9,
+                'B-': 8,
+                'C+': 7,
+                'C': 6,
+                'C-': 5,
+                'D+': 4,
+                'D': 3,
+                'D-': 2,
+                'E': 1
+            };
+            return gradeMap[grade] || 0;
+        }
+
+        function calculatePoints() {
+            const cluster = document.getElementById('cluster').value;
+            const aggregate = document.getElementById('aggregate').value;
+
+            if (!cluster) {
+                alert("Please select a desired cluster.");
+                return;
+            }
+
+            if (!aggregate || aggregate < 0 || aggregate > 84) {
+                alert("Please enter a valid aggregate point (0-84).");
+                return;
+            }
+
+            const subjects = clusters[cluster] || [];
+            let grades = [];
+
+            for (let i = 1; i <= subjects.length; i++) {
+                const grade = document.getElementById(`subject${i}`).value;
+                if (!grade) {
+                    alert(`Please select a grade for ${subjects[i - 1]}`);
+                    return;
+                }
+                grades.push(gradeToPoints(grade));
+            }
+
+            const rawClusterPoints = grades.reduce((sum, grade) => sum + grade, 0);
+            const normalizedScore = rawClusterPoints / 48;
+            const aggregatePerformanceRatio = aggregate / 84;
+            const clusterPoints = normalizedScore * aggregatePerformanceRatio * 48;
+
+            // Redirect to results page with query parameters
+            window.location.href = `results.html?cluster=${cluster}&points=${clusterPoints.toFixed(2)}`;
+        }
+
+        function resetFields() {
+            document.getElementById('cluster').value = "";
+            document.getElementById('aggregate').value = "";
+            document.getElementById('subjectInputs').style.display = "none";
+            document.getElementById('subjectInputs').innerHTML = "<p><b>Enter Grades for the Following Subjects:</b></p>";
+            document.getElementById('result').innerText = "";
+        }
+    </script>
+</body>
+</html>

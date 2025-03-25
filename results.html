@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cluster Points Results</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff; /* White background */
+            color: #333333; /* Neutral text color */
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            margin: 40px auto;
+            background: #f7f7f7; /* Light gray background */
+            padding: 20px;
+            box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        h1 {
+            font-size: 2em;
+            color: #ba0c2f; /* KUCCPS red */
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            font-size: 1.2em;
+            margin: 10px 0;
+            color: #333333; /* Neutral text color */
+        }
+        a {
+            color: #ba0c2f; /* KUCCPS red */
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .student-points {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #ba0c2f; /* KUCCPS red */
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cluster Points Results</h1>
+        <p id="studentPoints" class="student-points"></p>
+        <ul id="resultsList"></ul>
+    </div>
+
+    <script>
+        const courseData = {
+            "medicine": [
+                { university: "Egerton University", cutOff: 44.079 },
+                { university: "Kenyatta University", cutOff: 44.914 },
+                { university: "Maseno University", cutOff: 44.463 },
+                { university: "JKUAT", cutOff: 44.611 },
+                { university: "Moi University", cutOff: 44.492 },
+                { university: "University of Nairobi", cutOff: 45.034 },
+                { university: "Kenya Methodist University", cutOff: 38.040 },
+                { university: "Uzima University", cutOff: 33.193 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 44.026 },
+                { university: "Kisii University", cutOff: 44.012 },
+                { university: "Mount Kenya University", cutOff: 43.486 }
+            ],
+            "engineering": [
+                { university: "University of Nairobi", cutOff: 44.08 },
+                { university: "JKUAT", cutOff: 43.73 },
+                { university: "Kenyatta University", cutOff: 43.47 },
+                { university: "Technical University of Kenya", cutOff: 43.02 },
+                { university: "Dedan Kimathi University of Technology", cutOff: 41.67 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 38.65 },
+                { university: "Multimedia University of Kenya", cutOff: 39.20 },
+                { university: "Machakos University", cutOff: 38.43 }
+            ],
+            "biological-sciences": [
+                { university: "Jaramogi Oginga Odinga University of Science & Technology", cutOff: 23.258 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 24.144 },
+                { university: "Kisii University", cutOff: 24.317 },
+                { university: "University of Embu", cutOff: 21.976 },
+                { university: "Kibabii University", cutOff: 22.093 },
+                { university: "Kenyatta University", cutOff: 28.970 },
+                { university: "South Eastern Kenya University", cutOff: 22.622 },
+                { university: "Machakos University", cutOff: 23.439 },
+                { university: "University of Nairobi", cutOff: 27.622 },
+                { university: "Pwani University", cutOff: 25.674 },
+                { university: "University of Eastern Africa, Baraton", cutOff: 31.376 },
+                { university: "JKUAT", cutOff: 30.498 },
+                { university: "Catholic University of Eastern Africa", cutOff: 22.169 },
+                { university: "Chuka University", cutOff: 24.668 },
+                { university: "Kaimosi Friends University", cutOff: 24.317 }
+            ],
+            "physical-sciences": [
+                { university: "Kisii University", cutOff: 25.109 },
+                { university: "Meru University of Science & Technology", cutOff: 24.357 },
+                { university: "Kisii University", cutOff: 22.741 },
+                { university: "Kisii University", cutOff: 27.285 },
+                { university: "Kenyatta University", cutOff: 23.235 },
+                { university: "Pwani University", cutOff: 25.035 },
+                { university: "University of Nairobi", cutOff: 38.128 },
+                { university: "University of Nairobi", cutOff: 33.545 },
+                { university: "University of Eldoret", cutOff: 22.298 },
+                { university: "Technical University of Mombasa", cutOff: 28.352 },
+                { university: "Technical University of Mombasa", cutOff: 37.667 },
+                { university: "JKUAT", cutOff: 27.028 },
+                { university: "Technical University of Mombasa", cutOff: 28.152 },
+                { university: "Technical University of Mombasa", cutOff: 30.773 },
+                { university: "JKUAT", cutOff: 31.234 }
+            ],
+            "agriculture": [
+                { university: "Egerton University", cutOff: 26.79 },
+                { university: "University of Nairobi", cutOff: 24.21 },
+                { university: "Kenyatta University", cutOff: 29.33 },
+                { university: "Pwani University", cutOff: 22.79 },
+                { university: "Maseno University", cutOff: 27.97 },
+                { university: "Chuka University", cutOff: 25.94 },
+                { university: "Masinde Muliro University", cutOff: 27.52 },
+                { university: "South Eastern Kenya University", cutOff: 22.41 }
+            ],
+            "veterinary-medicine": [
+                { university: "University of Nairobi", cutOff: 39.091 },
+                { university: "Egerton University", cutOff: 38.443 }
+            ],
+            "computer-science": [
+                { university: "University of Nairobi", cutOff: 44.122 },
+                { university: "JKUAT", cutOff: 43.809 },
+                { university: "Kenyatta University", cutOff: 43.230 },
+                { university: "Maseno University", cutOff: 37.840 },
+                { university: "Dedan Kimathi University of Technology", cutOff: 39.405 },
+                { university: "Multimedia University of Kenya", cutOff: 41.440 },
+                { university: "Moi University", cutOff: 37.892 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 36.441 },
+                { university: "Pwani University", cutOff: 34.938 },
+                { university: "University of Eldoret", cutOff: 35.319 },
+                { university: "Technical University of Mombasa", cutOff: 36.915 },
+                { university: "Murang’a University of Technology", cutOff: 34.872 },
+                { university: "Mount Kenya University", cutOff: 37.675 },
+                { university: "Egerton University", cutOff: 37.746 },
+                { university: "Rongo University", cutOff: 31.699 }
+            ],
+            "business": [
+                { university: "University of Nairobi", cutOff: 33.556 },
+                { university: "Kenyatta University", cutOff: 30.779 },
+                { university: "JKUAT", cutOff: 30.346 },
+                { university: "Technical University of Kenya", cutOff: 29.07 },
+                { university: "Pwani University", cutOff: 21.444 },
+                { university: "Dedan Kimathi University of Technology", cutOff: 21.444 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 21.444 },
+                { university: "Machakos University", cutOff: 21.444 },
+                { university: "Zetech University", cutOff: 21.444 },
+                { university: "Laikipia University", cutOff: 21.444 },
+                { university: "Meru University of Science & Technology", cutOff: 21.444 },
+                { university: "Kabarak University", cutOff: 21.444 },
+                { university: "Multimedia University of Kenya", cutOff: 21.444 },
+                { university: "South Eastern Kenya University", cutOff: 21.444 },
+                { university: "Murang’a University of Technology", cutOff: 21.444 }
+            ],
+            "social-sciences": [
+                { university: "Maasai Mara University", cutOff: 24.767 },
+                { university: "South Eastern Kenya University", cutOff: 26.459 },
+                { university: "Moi University", cutOff: 27.343 },
+                { university: "University of Embu", cutOff: null },
+                { university: "St Paul’s University", cutOff: 27.891 },
+                { university: "Daystar University", cutOff: 26.687 },
+                { university: "Catholic University of Eastern Africa", cutOff: 27.554 },
+                { university: "Maseno University", cutOff: 24.89 }
+            ],
+            "education-science": [
+                { university: "University of Nairobi", cutOff: 37.073 },
+                { university: "Moi University", cutOff: 35.434 },
+                { university: "Kenyatta University", cutOff: 37.778 },
+                { university: "Egerton University", cutOff: 35.282 },
+                { university: "Chuka University", cutOff: 35.446 },
+                { university: "Kisii University", cutOff: 32.322 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 33.962 },
+                { university: "Jaramogi Oginga Odinga University of Science & Technology", cutOff: 29.888 },
+                { university: "Rongo University", cutOff: 27.259 },
+                { university: "University of Embu", cutOff: 30.482 },
+                { university: "Kibabii University", cutOff: 31.948 },
+                { university: "Murang’a University of Technology", cutOff: 31.162 },
+                { university: "Mount Kenya University", cutOff: 32.953 },
+                { university: "Catholic University of Eastern Africa", cutOff: 31.537 },
+                { university: "Technical University of Kenya", cutOff: 29.07 }
+            ],
+            "education-arts": [
+                { university: "University of Nairobi", cutOff: 33.663 },
+                { university: "Moi University", cutOff: 30.707 },
+                { university: "Kenyatta University", cutOff: 34.725 },
+                { university: "Maseno University", cutOff: 32.556 },
+                { university: "Egerton University", cutOff: 32.486 },
+                { university: "Chuka University", cutOff: 32.845 },
+                { university: "Kisii University", cutOff: 30.144 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 30.315 },
+                { university: "Pwani University", cutOff: 29.554 },
+                { university: "University of Kabianga", cutOff: 28.659 },
+                { university: "Machakos University", cutOff: 28.949 },
+                { university: "Laikipia University", cutOff: 26.869 },
+                { university: "Catholic University of Eastern Africa", cutOff: 28.642 },
+                { university: "Mount Kenya University", cutOff: 28.619 },
+                { university: "St Paul’s University", cutOff: 26.274 }
+            ],
+            "law": [
+                { university: "University of Nairobi", cutOff: 41.758 },
+                { university: "Kenyatta University", cutOff: 41.278 },
+                { university: "Moi University", cutOff: 40.788 },
+                { university: "Mount Kenya University", cutOff: 39.748 },
+                { university: "Maseno University", cutOff: 39.439 },
+                { university: "Egerton University", cutOff: 39.860 },
+                { university: "Kisii University", cutOff: 39.448 },
+                { university: "Chuka University", cutOff: 39.904 },
+                { university: "Riara University", cutOff: 39.033 },
+                { university: "Daystar University", cutOff: 39.663 },
+                { university: "University of Embu", cutOff: 38.819 },
+                { university: "Catholic University of Eastern Africa", cutOff: 33.856 },
+                { university: "Umma University", cutOff: 37.367 },
+                { university: "Kabarak University", cutOff: 35.922 },
+                { university: "JKUAT", cutOff: 41.254 }
+            ],
+            "hospitality": [
+                { university: "Kenyatta University", cutOff: 31.532 },
+                { university: "Pwani University", cutOff: 27.459 },
+                { university: "Machakos University", cutOff: 26.811 },
+                { university: "Dedan Kimathi University of Technology", cutOff: 27.295 },
+                { university: "Masinde Muliro University of Science & Technology", cutOff: 26.561 },
+                { university: "Scott Christian University", cutOff: 21.444 },
+                { university: "Kabarak University", cutOff: 26.252 },
+                { university: "Kenya Methodist University", cutOff: 24.054 },
+                { university: "Presbyterian University of East Africa", cutOff: 21.444 },
+                { university: "Zetech University", cutOff: 24.231 }
+            ]
+        };
+
+        // Get query parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const cluster = urlParams.get('cluster');
+        const points = parseFloat(urlParams.get('points'));
+
+        const resultsList = document.getElementById('resultsList');
+        const title = document.querySelector('h1');
+        const studentPointsElement = document.getElementById('studentPoints');
+
+        if (courseData[cluster]) {
+            title.textContent = `Course Qualified: ${cluster.replace(/-/g, ' ')}`;
+            studentPointsElement.textContent = `Your Cluster Points: ${points}`;
+            const qualifiedCourses = courseData[cluster]
+                .filter(course => points >= course.cutOff)
+                .map(course => `<li>${course.university} (Cut-Off: ${course.cutOff})</li>`)
+                .join("");
+
+            resultsList.innerHTML = qualifiedCourses
+                ? qualifiedCourses
+                : "<li>Sorry, you don't qualify for any courses in this cluster.</li>";
+        } else {
+            title.textContent = "Cluster Points Results";
+            studentPointsElement.textContent = `Your Cluster Points: ${points}`;
+            resultsList.innerHTML = "<li>No data available for this cluster.</li>";
+        }
+    </script>
+</body>
+</html>
